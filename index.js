@@ -9,16 +9,16 @@
 
 // EXAMPLE SOLUTION CODE:
 class Airplane {
-  constructor(name) {
-    this.name = name;
-    this.isFlying = false;
-  }
-  takeOff() {
-    this.isFlying = true;
-  }
-  land() {
-    this.isFlying = false;
-  }
+    constructor(name) {
+        this.name = name;
+        this.isFlying = false;
+    }
+    takeOff() {
+        this.isFlying = true;
+    }
+    land() {
+        this.isFlying = false;
+    }
 }
 
 /*
@@ -41,8 +41,39 @@ class Airplane {
 */
 
 class Person {
-
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+        this.stomach = [];
+    }
+    eat(edibles) {
+        if (this.stomach.length < 10) {
+            this.stomach.push(edibles);
+        }
+    }
+    poop() {
+        this.stomach = [];
+    }
+    toString() {
+        return `${this.name}, ${this.age}`
+    }
 }
+const personOne = new Person('Ramsha', 22);
+const personTwo = new Person('Teddy', 27);
+
+console.log(personOne.toString());
+console.log(personTwo.toString());
+
+personTwo.eat('🥓');
+personTwo.eat('🍰');
+
+console.log(personTwo.stomach);
+
+personTwo.poop();
+
+console.log(personTwo.stomach);
+
+
 
 /*
   TASK 2
@@ -59,8 +90,34 @@ class Person {
 */
 
 class Car {
+    constructor(model, milesPerGallon) {
+        this.model = model;
+        this.milesPerGallon = milesPerGallon;
+        this.tank = 0;
+        this.odometer = 0;
+    }
+    fill(gallons) {
+        this.tank = this.tank + gallons;
+    }
+    drive(distance) {
+        this.odometer = this.odometer + distance;
+        this.tank = this.tank - (distance / this.milesPerGallon);
+        if (this.tank <= 0) {
+            return `This is what happens when you live on the edge! Refill!`
+        } else {
+            return `KEep going!`;
+        }
 
+    }
 }
+const car1 = new Car('BMW 328i', 27)
+
+console.log(car1);
+
+console.log(car1.fill(8));
+
+console.log(car1.drive(250));
+
 
 /*
   TASK 3
@@ -75,9 +132,21 @@ class Car {
         + {name} and {location} of course come from the instance's own properties.
 */
 class Lambdasian {
-
+    constructor(attributes) {
+        this.name = attributes.name;
+        this.age = attributes.age;
+        this.location = attributes.location;
+    }
+    speak() {
+        return `Hello my name is ${this.name}, and I'm from ${this.location}`
+    }
 }
-
+const person = new Lambdasian({
+    name: 'Ramsha',
+    age: 22,
+    location: 'Chicago'
+})
+console.log(person.speak());
 /*
   TASK 4
     - Write an Instructor class extending Lambdasian.
@@ -92,9 +161,33 @@ class Lambdasian {
         + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
         + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
 */
-class Instructor {
-
+class Instructor extends Lambdasian {
+    constructor(attributes) {
+        super(attributes);
+        this.specialty = attributes.specialty;
+        this.favLanguage = attributes.favLanguage;
+        this.catchPhrase = attributes.catchPhrase;
+    }
+    demo(subject) {
+        return `Today we are learning about ${subject}`;
+    }
+    grade(subject) {
+        return `${this.name} recieved a perfect score on ${subject}`;
+    }
 }
+const teacher = new Instructor({
+    name: 'Stan',
+    age: 32,
+    location: 'San Diego',
+    specialty: 'Redux',
+    subject: 'JS',
+    favLanguage: 'Python',
+    catchPhrase: 'Live a little!',
+})
+console.log(teacher.speak());
+console.log(teacher.demo('HTML'));
+console.log(teacher.grade('CSS'));
+
 
 /*
   TASK 5
@@ -111,9 +204,36 @@ class Instructor {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
-class Student {
-
+class Student extends Lambdasian {
+    constructor(attributes) {
+        super(attributes);
+        this.previousBackground = attributes.previousBackground;
+        this.classNmae = attributes.className;
+        this.favSubject = attributes.favSubject;
+    }
+    listSubjects() {
+        return `my favorite subject is ${this.favSubject}`
+    }
+    prAssignment(student, subject) {
+        return `${student} has submitted assignments for grade for ${subject}`
+    }
+    sprintChallenge(student, subject) {
+        return `${student} has begun sprint challenge on ${subject}`
+    }
 }
+const student1 = new Student({
+    name: 'Jack',
+    age: 25,
+    location: 'Paris',
+    previousBackground: 'Athlete',
+    className: 'Web36',
+    favSubject: 'JavaScript'
+});
+
+console.log(student1.speak());
+console.log(student1.listSubjects());
+console.log(student1.prAssignment('Ramsha', 'JS'));
+console.log(student1.sprintChallenge('Ramsha', 'JS'));
 
 /*
   TASK 6
@@ -128,29 +248,54 @@ class Student {
         + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
-class ProjectManager {
+class ProjectManager extends Instructor {
+    constructor(attributes) {
+        super(attributes);
+        this.gradClassName = attributes.gradClassName;
+        this.favInstructor = attributes.favInstructor;
+    }
+    standUp(name, channel) {
+        return `${name} announces to ${channel}! @channel standy time!`
+    }
+    debugCode(student, subject) {
+        return `${this.name} debugs ${student}'s code on ${subject}`
+    }
 
 }
-
-/*
-  STRETCH PROBLEM (no tests!)
-    - Extend the functionality of the Student by adding a prop called grade and setting it equal to a number between 1-100.
-    - Now that our students have a grade build out a method on the Instructor (this will be used by _BOTH_ instructors and PM's) that will randomly add or subtract points to a student's grade. _Math.random_ will help.
-    - Add a graduate method to a student.
-      + This method, when called, will check the grade of the student and see if they're ready to graduate from Lambda School
-      + If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
-*/
+const pm = new ProjectManager({
+    name: 'Silvia',
+    age: 26,
+    location: 'Ontario',
+    specialty: 'Redux',
+    subject: 'CSS',
+    favLanguage: 'C++',
+    catchPhrase: 'Big Brainy Bobby',
+    gradClassName: 'Web21',
+    favInstructor: 'Ryan',
+})
+console.log(pm.speak());
+console.log(pm.demo('JS'));
+console.log(pm.standUp('Britt', 'web36'));
+console.log(pm.debugCode('Ramsha', 'C++'))
+    /*
+      STRETCH PROBLEM (no tests!)
+        - Extend the functionality of the Student by adding a prop called grade and setting it equal to a number between 1-100.
+        - Now that our students have a grade build out a method on the Instructor (this will be used by _BOTH_ instructors and PM's) that will randomly add or subtract points to a student's grade. _Math.random_ will help.
+        - Add a graduate method to a student.
+          + This method, when called, will check the grade of the student and see if they're ready to graduate from Lambda School
+          + If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
+    */
 
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 if (typeof exports !== 'undefined') {
-  module.exports = module.exports || {}
-  if (Airplane) { module.exports.Airplane = Airplane }
-  if (Person) { module.exports.Person = Person }
-  if (Car) { module.exports.Car = Car }
-  if (Lambdasian) { module.exports.Lambdasian = Lambdasian }
-  if (Instructor) { module.exports.Instructor = Instructor }
-  if (Student) { module.exports.Student = Student }
-  if (ProjectManager) { module.exports.ProjectManager = ProjectManager }
+    module.exports = module.exports || {}
+    if (Airplane) { module.exports.Airplane = Airplane }
+    if (Person) { module.exports.Person = Person }
+    if (Car) { module.exports.Car = Car }
+    if (Lambdasian) { module.exports.Lambdasian = Lambdasian }
+    if (Instructor) { module.exports.Instructor = Instructor }
+    if (Student) { module.exports.Student = Student }
+    if (ProjectManager) { module.exports.ProjectManager = ProjectManager }
 }
